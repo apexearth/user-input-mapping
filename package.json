@@ -15,9 +15,13 @@
     "gamepad"
   ],
   "author": "apexearth@gmail.com",
+  "repository": {
+    "url": "https://github.com/apexearth/user-input-mapping"
+  },
   "license": "MIT",
   "devDependencies": {
     "expect": "^1.16.0",
+    "mocha": "^2.4.5",
     "user-input": "^1.1.0"
   }
 }
