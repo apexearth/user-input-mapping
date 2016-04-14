@@ -1,0 +1,23 @@
+{
+  "name": "user-input-mapping",
+  "version": "1.0.0",
+  "description": "Map user inputs from require(\"user-input\").",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha \"**/*-Spec.js\""
+  },
+  "keywords": [
+    "user",
+    "input",
+    "mapping",
+    "key",
+    "mouse",
+    "gamepad"
+  ],
+  "author": "apexearth@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "expect": "^1.16.0",
+    "user-input": "^1.1.0"
+  }
+}
