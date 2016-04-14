@@ -1,7 +1,7 @@
 {
   "name": "user-input-mapping",
-  "version": "1.0.0",
-  "description": "Map user inputs from require(\"user-input\").",
+  "version": "1.0.1",
+  "description": "Map user inputs from user-input.",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha \"**/*-Spec.js\""
