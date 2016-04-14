@@ -1,9 +1,9 @@
 # user-input-mapping
 
-![](https://travis-ci.org/apexearth/user-input-mapping.svg)  
-![](http://img.shields.io/npm/v/user-input-mapping.svg?style=flat)  
-![](http://img.shields.io/npm/dm/user-input-mapping.svg?style=flat)  
-![](http://img.shields.io/npm/l/user-input-mapping.svg?style=flat)  
+![](https://travis-ci.org/apexearth/user-input-mapping.svg)
+![](http://img.shields.io/npm/v/user-input-mapping.svg?style=flat)
+![](http://img.shields.io/npm/dm/user-input-mapping.svg?style=flat)
+![](http://img.shields.io/npm/l/user-input-mapping.svg?style=flat)
 
 Create mappings for user inputs.
 
