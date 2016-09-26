@@ -11,6 +11,125 @@ Create mappings for user inputs.
 
 [![NPM](https://nodei.co/npm/user-input-mapping.png)](https://nodei.co/npm/user-input-mapping/)
 
+Quick example.
+
+    var Mapping   = require("user-input-mapping")
+    var userInput = require("user-input")
+         
+    // Create an input listener.
+    var input   = userInput().withKeyboard()
+    
+    // Create a mapping to translate the inputs.
+    var mapping = new Mapping(input, {
+        keyboard: {
+            left:  "A",
+            right: function (k) {
+                return k("A") === 1
+            }
+        }
+    })
+    
+    mapping.value('right') // Equals 0 or 1 depending on the state of key A.
+
+See below for test cases.
+
+    it("should do mapping stuff", function () {
+        var input   = userInput().withKeyboard()
+        var mapping = new Mapping(input, {
+            keyboard: {
+                left:  "A",
+                right: function (k) {
+                    return k("A") === 1
+                }
+            }
+        })
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+        input.keyboard('A', 1)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+
+        mapping.update()
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(1)
+
+        input.keyboard('A', 0)
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(1)
+
+        mapping.update()
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+
+        mapping.value('right', 'hello')
+        expect(mapping.value('right')).toEqual('hello')
+        mapping.update()
+        expect(mapping.value('right')).toEqual(0) // Because of mapping, will resolve back to 0 during update.
+
+        mapping.value('greeting', 'hello')        // Not in the map.
+        expect(mapping.value('greeting')).toEqual('hello')
+        mapping.update()
+        expect(mapping.value('greeting')).toEqual('hello')
+
+        input.keyboard('A', 1)
+        mapping.update()
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(1)
+    })
+    
+    it("should do mapping stuff, requireUpdate = false", function () {
+        var input   = userInput().withKeyboard()
+        var mapping = new Mapping(input, {
+            keyboard: {
+                left:  "A",
+                right: function (k) {
+                    return k("A") === 1
+                }
+            }
+        }, false)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+        input.keyboard('A', 1)
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(1)
+
+        input.keyboard('A', 0)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+
+        mapping.value('right', 'hello')
+        expect(mapping.value('right')).toEqual(0) // Because of mapping, will resolve back to 0 during update.
+
+        mapping.value('greeting', 'hello')
+        expect(mapping.value('greeting')).toEqual('hello')
+
+        input.keyboard('A', 1)
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(1)
+    })
+    
+    it("function mapping test", function() {
+        var input   = userInput().withKeyboard()
+        var mapping = new Mapping(input, {
+            keyboard: {
+                left:  "A",
+                right: function (k) {
+                    return k("A") / 2;
+                }
+            }
+        }, false)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+        input.keyboard('A', 1)
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('right')).toEqual(.5)
+        input.keyboard('A', 11)
+        expect(mapping.value('left')).toEqual(11)
+        expect(mapping.value('right')).toEqual(5.5)
+    })
+
+
+
 ### Example ([source](https://github.com/apexearth/starship/blob/master/src/player/player.human.js))
 
     var util      = require("util")
