@@ -1,6 +1,6 @@
 {
   "name": "user-input-mapping",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Map user inputs from user-input.",
   "main": "src/index.js",
   "scripts": {
