@@ -29,7 +29,10 @@ var mapping = new Mapping(input, {
     }
 })
 
-mapping.value('right') // Equals 0 or 1 depending on the state of key A.
+mapping.value('right');    // Equals 0 or 1 depending on the state of key A.
+mapping.value('right', 1); // Set the value of right to 1.
+mapping.clear();           // Clear the values.
+mapping.value.clear()      // Clear the values, useful if you export .value()
 ```
 
 See below for test cases.
@@ -157,6 +160,46 @@ it("handles arrays in the mapping", function() {
     expect(mapping.value('left')).toEqual(16)
     expect(mapping.value('right')).toEqual(20.5)
 });
+
+it("can have it's values cleared", function () {
+    var input = userInput().withKeyboard().withMouse();
+    var mapping = new Mapping(input, {
+        keyboard: {
+            left: "A"
+        },
+        mouse: {
+            button0: "mouse0"
+        }
+    }, false)
+    expect(mapping.value('left')).toEqual(0)
+    expect(mapping.value('button0')).toEqual(0)
+    expect(mapping.value('test')).toEqual(0)
+    input.keyboard('A', 1)
+    input.mouse('mouse0', 1)
+    mapping.value('test', 1);
+    expect(mapping.value('left')).toEqual(1)
+    expect(mapping.value('button0')).toEqual(1)
+    expect(mapping.value('test')).toEqual(1)
+
+    // .clear()
+    mapping.clear();
+    expect(mapping.value('left')).toEqual(0)
+    expect(mapping.value('button0')).toEqual(0)
+    expect(mapping.value('test')).toEqual(0)
+
+    // .value.clear() alias
+    input.keyboard('A', 1)
+    input.mouse('mouse0', 1)
+    mapping.value('test', 1);
+    expect(mapping.value('left')).toEqual(1)
+    expect(mapping.value('button0')).toEqual(1)
+    expect(mapping.value('test')).toEqual(1)
+
+    mapping.value.clear();
+    expect(mapping.value('left')).toEqual(0)
+    expect(mapping.value('button0')).toEqual(0)
+    expect(mapping.value('test')).toEqual(0)
+})
 ```
 
 ### Example ([source](https://github.com/apexearth/starship/blob/master/src/player/player.human.js))

@@ -5,6 +5,11 @@ function Mapping(input, mapping, requireUpdates) {
     this.mapping = mapping
     this.requireUpdates = typeof requireUpdates === 'undefined' ? true : requireUpdates;
     this.values = {}
+    this.value.clear = this.clear.bind(this);
+}
+
+Mapping.prototype.getInput = function (source) {
+    return source === "gamepad" ? this.input[source]() : this.input[source];
 }
 
 Mapping.prototype.update = function (updateKey) {
@@ -17,24 +22,24 @@ Mapping.prototype.update = function (updateKey) {
     }
     for (source in this.mapping) {
         if (!this.mapping.hasOwnProperty(source)) continue;
-        var inputSourceValue = source === "gamepad" ? this.input[source]() : this.input[source];
-        var sourceValue = this.mapping[source];
+        var inputSource = this.getInput(source);
+        var mappingSource = this.mapping[source];
 
-        for (key in sourceValue) {
-            if (sourceValue.hasOwnProperty(key) && (!updateKey || updateKey === key)) {
-                var keyValue = sourceValue[key]
+        for (key in mappingSource) {
+            if (mappingSource.hasOwnProperty(key) && (!updateKey || updateKey === key)) {
+                var keyValue = mappingSource[key]
                 if (typeof keyValue === 'string') {
-                    this.values[key] = (this.values[key] || 0) + inputSourceValue(keyValue)
+                    this.values[key] = (this.values[key] || 0) + inputSource(keyValue)
                 } else if (typeof keyValue === 'function') {
-                    if (inputSourceValue !== undefined)
-                        this.values[key] = (this.values[key] || 0) + keyValue(inputSourceValue)
+                    if (inputSource !== undefined)
+                        this.values[key] = (this.values[key] || 0) + keyValue(inputSource)
                 } else if (Object.prototype.toString.call(keyValue) === '[object Array]') {
-                    for(var i = 0; i < keyValue.length; i++) {
+                    for (var i = 0; i < keyValue.length; i++) {
                         if (typeof keyValue[i] === 'string') {
-                            this.values[key] = (this.values[key] || 0) + inputSourceValue(keyValue[i])
+                            this.values[key] = (this.values[key] || 0) + inputSource(keyValue[i])
                         } else if (typeof keyValue[i] === 'function') {
-                            if (inputSourceValue !== undefined)
-                                this.values[key] = (this.values[key] || 0) + keyValue[i](inputSourceValue)
+                            if (inputSource !== undefined)
+                                this.values[key] = (this.values[key] || 0) + keyValue[i](inputSource)
                         }
                     }
                 }
@@ -51,4 +56,9 @@ Mapping.prototype.value = function (key, value) {
         this.values[key] = value;
     }
     return this.values[key] || 0
+}
+
+Mapping.prototype.clear = function () {
+    this.values = {};
+    this.input.clear();
 }

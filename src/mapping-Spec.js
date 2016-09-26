@@ -1,14 +1,14 @@
 var expect = require("expect");
 
-var Mapping   = require("./")
+var Mapping = require("./")
 var userInput = require("user-input")
 
 describe("mapping.js", function () {
     it("should do mapping stuff", function () {
-        var input   = userInput().withKeyboard()
+        var input = userInput().withKeyboard()
         var mapping = new Mapping(input, {
             keyboard: {
-                left:  "A",
+                left: "A",
                 right: function (k) {
                     return k("A") === 1
                 }
@@ -48,10 +48,10 @@ describe("mapping.js", function () {
         expect(mapping.value('right')).toEqual(1)
     })
     it("should do mapping stuff, requireUpdate = false", function () {
-        var input   = userInput().withKeyboard()
+        var input = userInput().withKeyboard()
         var mapping = new Mapping(input, {
             keyboard: {
-                left:  "A",
+                left: "A",
                 right: function (k) {
                     return k("A") === 1
                 }
@@ -77,11 +77,11 @@ describe("mapping.js", function () {
         expect(mapping.value('left')).toEqual(1)
         expect(mapping.value('right')).toEqual(1)
     })
-    it("function mapping test", function() {
-        var input   = userInput().withKeyboard()
+    it("function mapping test", function () {
+        var input = userInput().withKeyboard()
         var mapping = new Mapping(input, {
             keyboard: {
-                left:  "A",
+                left: "A",
                 right: function (k) {
                     return k("A") / 2;
                 }
@@ -96,11 +96,11 @@ describe("mapping.js", function () {
         expect(mapping.value('left')).toEqual(11)
         expect(mapping.value('right')).toEqual(5.5)
     })
-    it("handles arrays in the mapping", function() {
-        var input   = userInput().withKeyboard()
+    it("handles arrays in the mapping", function () {
+        var input = userInput().withKeyboard()
         var mapping = new Mapping(input, {
             keyboard: {
-                left:  ["A", "B"],
+                left: ["A", "B"],
                 right: [
                     function (k) {
                         return k("A") / 2;
@@ -123,4 +123,43 @@ describe("mapping.js", function () {
         expect(mapping.value('left')).toEqual(16)
         expect(mapping.value('right')).toEqual(20.5)
     });
+    it("can have it's values cleared", function () {
+        var input = userInput().withKeyboard().withMouse();
+        var mapping = new Mapping(input, {
+            keyboard: {
+                left: "A"
+            },
+            mouse: {
+                button0: "mouse0"
+            }
+        }, false)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('button0')).toEqual(0)
+        expect(mapping.value('test')).toEqual(0)
+        input.keyboard('A', 1)
+        input.mouse('mouse0', 1)
+        mapping.value('test', 1);
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('button0')).toEqual(1)
+        expect(mapping.value('test')).toEqual(1)
+
+        // .clear()
+        mapping.clear();
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('button0')).toEqual(0)
+        expect(mapping.value('test')).toEqual(0)
+
+        // .value.clear() alias
+        input.keyboard('A', 1)
+        input.mouse('mouse0', 1)
+        mapping.value('test', 1);
+        expect(mapping.value('left')).toEqual(1)
+        expect(mapping.value('button0')).toEqual(1)
+        expect(mapping.value('test')).toEqual(1)
+
+        mapping.value.clear();
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('button0')).toEqual(0)
+        expect(mapping.value('test')).toEqual(0)
+    })
 })
