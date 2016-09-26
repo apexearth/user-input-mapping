@@ -9,14 +9,14 @@ function Mapping(input, mapping, requireUpdates) {
 
 Mapping.prototype.update = function (updateKey) {
     for (var source in this.mapping) {
-        if(!this.mapping.hasOwnProperty(source)) continue;
+        if (!this.mapping.hasOwnProperty(source)) continue;
         for (var key in this.mapping[source]) {
-            if(!this.mapping[source].hasOwnProperty(key)) continue;
+            if (!this.mapping[source].hasOwnProperty(key)) continue;
             this.values[key] = 0;
         }
     }
     for (source in this.mapping) {
-        if(!this.mapping.hasOwnProperty(source)) continue;
+        if (!this.mapping.hasOwnProperty(source)) continue;
         var inputSourceValue = source === "gamepad" ? this.input[source]() : this.input[source];
         var sourceValue = this.mapping[source];
 
@@ -28,10 +28,18 @@ Mapping.prototype.update = function (updateKey) {
                 } else if (typeof keyValue === 'function') {
                     if (inputSourceValue !== undefined)
                         this.values[key] = (this.values[key] || 0) + keyValue(inputSourceValue)
+                } else if (Object.prototype.toString.call(keyValue) === '[object Array]') {
+                    for(var i = 0; i < keyValue.length; i++) {
+                        if (typeof keyValue[i] === 'string') {
+                            this.values[key] = (this.values[key] || 0) + inputSourceValue(keyValue[i])
+                        } else if (typeof keyValue[i] === 'function') {
+                            if (inputSourceValue !== undefined)
+                                this.values[key] = (this.values[key] || 0) + keyValue[i](inputSourceValue)
+                        }
+                    }
                 }
             }
         }
-
     }
 }
 

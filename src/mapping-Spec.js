@@ -96,4 +96,31 @@ describe("mapping.js", function () {
         expect(mapping.value('left')).toEqual(11)
         expect(mapping.value('right')).toEqual(5.5)
     })
+    it("handles arrays in the mapping", function() {
+        var input   = userInput().withKeyboard()
+        var mapping = new Mapping(input, {
+            keyboard: {
+                left:  ["A", "B"],
+                right: [
+                    function (k) {
+                        return k("A") / 2;
+                    },
+                    function (k) {
+                        return k("B") * 2;
+                    },
+                    "B"
+                ]
+            }
+        }, false)
+        expect(mapping.value('left')).toEqual(0)
+        expect(mapping.value('right')).toEqual(0)
+        input.keyboard('A', 1)
+        input.keyboard('B', 1)
+        expect(mapping.value('left')).toEqual(2)
+        expect(mapping.value('right')).toEqual(3.5)
+        input.keyboard('A', 11)
+        input.keyboard('B', 5)
+        expect(mapping.value('left')).toEqual(16)
+        expect(mapping.value('right')).toEqual(20.5)
+    });
 })
