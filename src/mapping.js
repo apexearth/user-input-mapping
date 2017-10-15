@@ -31,14 +31,14 @@ Mapping.prototype.update = function (updateKey) {
                 if (typeof keyValue === 'string') {
                     this.values[key] = (this.values[key] || 0) + inputSource(keyValue)
                 } else if (typeof keyValue === 'function') {
-                    if (inputSource !== undefined)
+                    if (inputSource)
                         this.values[key] = (this.values[key] || 0) + keyValue(inputSource)
                 } else if (Object.prototype.toString.call(keyValue) === '[object Array]') {
                     for (var i = 0; i < keyValue.length; i++) {
                         if (typeof keyValue[i] === 'string') {
                             this.values[key] = (this.values[key] || 0) + inputSource(keyValue[i])
                         } else if (typeof keyValue[i] === 'function') {
-                            if (inputSource !== undefined)
+                            if (inputSource)
                                 this.values[key] = (this.values[key] || 0) + keyValue[i](inputSource)
                         }
                     }

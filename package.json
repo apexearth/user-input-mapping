@@ -1,10 +1,10 @@
 {
   "name": "user-input-mapping",
-  "version": "1.3.0",
-  "description": "Map user inputs from user-input.",
+  "version": "1.4.1",
+  "description": "Map keyboard, mouse, gamepad, and touch inputs from user-input.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha \"**/*-Spec.js\""
+    "test": "mocha src/**/*.spec.js"
   },
   "keywords": [
     "user",
